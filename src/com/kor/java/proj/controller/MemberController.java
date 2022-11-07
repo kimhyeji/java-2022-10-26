@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kor.java.proj.dto.Article;
 import com.kor.java.proj.dto.Member;
 import com.kor.java.proj.util.Util;
 
@@ -36,7 +37,14 @@ public class MemberController extends Controller {
 			System.out.println("존재하지 않는 명령어 입니다.");
 			break;
 		}
+	}
+	
+	public void makeTestData() {
+		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
 
+		members.add(new Member(1, Util.getNOtwDateStr(), "admin", "admin", "관리자"));
+		members.add(new Member(2, Util.getNOtwDateStr(), "user1", "user1", "유저1"));
+		members.add(new Member(3, Util.getNOtwDateStr(), "user2", "user2", "유저2"));
 	}
 	
 	private void doLogin() {
@@ -46,7 +54,6 @@ public class MemberController extends Controller {
 		String loginPw = sc.nextLine();
 		
 		// 입력받은 아이디에 해당하는 회원이 존재하는지
-		
 		Member member = getMemberByLoginId(loginId);
 		
 		if ( member == null ) {
