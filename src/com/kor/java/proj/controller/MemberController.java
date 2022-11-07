@@ -6,13 +6,27 @@ import java.util.Scanner;
 import com.kor.java.proj.dto.Member;
 import com.kor.java.proj.util.Util;
 
-public class MemberController {
+public class MemberController extends Controller {
 	private Scanner sc;
 	private List<Member> members;
+	private String command;
+	private String actionMethodName;
 	
 	public MemberController(Scanner sc, List<Member> members) {
 		this.sc = sc;
 		this.members = members;
+	}
+	
+	public void doAction(String commnad, String actionMethodName) {
+		this.command = command;
+		this.actionMethodName = actionMethodName;
+		
+		switch ( actionMethodName ) {
+		case "join" :
+			doJoin();
+			break;
+		}
+
 	}
 	
 	public void doJoin() {
