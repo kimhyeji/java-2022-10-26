@@ -26,4 +26,8 @@ private MemberDao memberDao;
 	public int getNewId() {
 		return memberDao.getLastId();
 	}
+
+	public String getMemberNameById(int memberId) {
+		return memberDao.getMemberNameById(memberId);
+	}
 }
