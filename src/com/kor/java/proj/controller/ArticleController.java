@@ -11,16 +11,13 @@ import com.kor.java.proj.util.Util;
 
 public class ArticleController extends Controller {
 	private Scanner sc;
-	private List<Article> articles;
 	private String command;
 	private String actionMethodName;
 	private ArticleService articleService;
 	
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
-		this.articles = articles;
 		
-		articles = Container.articleDao.articles;
 		articleService = Container.articleService;
 	}
 	
@@ -51,7 +48,7 @@ public class ArticleController extends Controller {
 	}
 	
 	private void doWrite() {
-		int id = Container.articleDao.getNewId();
+		int id = articleService.getNewId();
 		String regDate = Util.getNOtwDateStr();
 		System.out.printf("제목 : ");
 		String title = sc.nextLine();
@@ -59,7 +56,7 @@ public class ArticleController extends Controller {
 		String body = sc.nextLine();
 
 		Article article = new Article(id, regDate, loginedMember.id, title, body);
-		Container.articleDao.add(article);
+		articleService.add(article);
 
 		System.out.printf("%d번 글이 생성되었습니다.\n", id);
 	}

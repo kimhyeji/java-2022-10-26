@@ -1,25 +1,23 @@
 package com.kor.java.proj.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.kor.java.proj.container.Container;
-import com.kor.java.proj.dto.Article;
 import com.kor.java.proj.dto.Member;
+import com.kor.java.proj.service.MemberService;
 import com.kor.java.proj.util.Util;
 
 public class MemberController extends Controller {
 	private Scanner sc;
-	private List<Member> members;
 	private String command;
 	private String actionMethodName;
+	private MemberService memberService;
 	
 	public MemberController(Scanner sc) {
 		this.sc = sc;
-		this.members = members;
 		
-		members = Container.memberDao.members;
+		memberService = Container.memberService;
 	}
 	
 	public void doAction(String commnad, String actionMethodName) {
@@ -54,7 +52,7 @@ public class MemberController extends Controller {
 		String loginPw = sc.nextLine();
 		
 		// 입력받은 아이디에 해당하는 회원이 존재하는지
-		Member member = getMemberByLoginId(loginId);
+		Member member = memberService.getMemberByLoginId(loginId);
 		
 		if ( member == null ) {
 			System.out.println("해당회원은 존재하지 않습니다.");
@@ -71,7 +69,7 @@ public class MemberController extends Controller {
 	}
 
 	private void doJoin() {
-		int id = Container.memberDao.getNewId();
+		int id = memberService.getNewId();
 		String regDate = Util.getNOtwDateStr();
 		
 		String loginId = null;
@@ -80,7 +78,7 @@ public class MemberController extends Controller {
 			System.out.printf("로그인 아이디 : ");
 			loginId = sc.nextLine();
 			
-			if ( isJoinableLoginId(loginId) == false ) {
+			if ( memberService.isJoinableLoginId(loginId) == false ) {
 				System.out.printf("%s(은)는 이미 사용중인 아이디 입니다.\n", loginId);
 				continue;
 			}
@@ -109,42 +107,9 @@ public class MemberController extends Controller {
 		String name = sc.nextLine();
 
 		Member member = new Member(id, regDate, loginId, loginPw, name);
-		Container.memberDao.add(member);
+		memberService.join(member);
 
 		System.out.printf("%d번 회원이 생성되었습니다. 환영합니다.\n", id);
-	}
-	
-	private Member getMemberByLoginId(String loginId) {
-		int index = getMemberIndexByLoginId(loginId);
-		
-		if ( index == -1 ) {
-			return null;
-		}
-		
-		return members.get(index);
-	}
-
-	private boolean isJoinableLoginId(String loginId) {
-		int index = getMemberIndexByLoginId(loginId);
-		
-		if ( index == -1 ) {
-			return true;
-		}
-		
-		return false;
-	}
-
-	private int getMemberIndexByLoginId(String loginId) {
-		int i = 0;
-
-		for (Member member : members) {
-			if (member.loginId.equals(loginId)) {
-				return i;
-			}
-			i++;
-		}
-
-		return -1;
 	}
 
 	public void makeTestData() {

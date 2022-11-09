@@ -18,5 +18,36 @@ public class MemberDao extends Dao {
 		lastId = member.id;
 	}
 
-	
+	public Member getMemberByLoginId(String loginId) {
+		int index = getMemberIndexByLoginId(loginId);
+		
+		if ( index == -1 ) {
+			return null;
+		}
+		
+		return members.get(index);
+	}
+
+	public boolean isJoinableLoginId(String loginId) {
+		int index = getMemberIndexByLoginId(loginId);
+		
+		if ( index == -1 ) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	public int getMemberIndexByLoginId(String loginId) {
+		int i = 0;
+
+		for (Member member : members) {
+			if (member.loginId.equals(loginId)) {
+				return i;
+			}
+			i++;
+		}
+
+		return -1;
+	}
 }
