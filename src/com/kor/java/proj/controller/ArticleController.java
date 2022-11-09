@@ -1,10 +1,11 @@
 package com.kor.java.proj.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kor.java.proj.container.Container;
 import com.kor.java.proj.dto.Article;
+import com.kor.java.proj.dto.Member;
 import com.kor.java.proj.util.Util;
 
 public class ArticleController extends Controller {
@@ -17,7 +18,7 @@ public class ArticleController extends Controller {
 		this.sc = sc;
 		this.articles = articles;
 		
-		articles = new ArrayList<Article>();
+		articles = Container.articleDao.articles;
 	}
 	
 	public void doAction(String command, String actionMethodName) {
@@ -66,11 +67,21 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		System.out.println("번호  | 작성자 | 조회  | 제목");
+		System.out.println("번호  |  작성자 | 조회  | 제목");
 		for (int i = articles.size() - 1; i >= 0; i--) {
 			Article article = articles.get(i);
+			
+			String writerName = null;
+			List<Member> members = Container.memberDao.members;
+			
+			for ( Member member : members ) {
+				if ( article.memberId == member.id ) {
+					writerName = member.name;
+					break;
+				}
+			}
 
-			System.out.printf("%4d | %4d | %4d | %s\n", article.id, article.memberId, article.hit, article.title);
+			System.out.printf("%4d | %4s | %4d | %s\n", article.id, writerName, article.hit, article.title);
 		}
 	}
 
